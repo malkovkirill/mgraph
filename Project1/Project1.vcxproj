@@ -30,7 +30,21 @@
   </ItemGroup>
   <ItemGroup>
     <Text Include="F_shader.txt" />
+    <Text Include="V_LightShader.txt" />
     <Text Include="V_shader.txt" />
+    <Text Include="F_LightShader.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Depth.fs" />
+    <None Include="Depth.vs" />
+    <None Include="Depth_Map.fs" />
+    <None Include="Depth_Map.vs" />
+    <None Include="Mirror.fs" />
+    <None Include="Mirror.vs" />
+    <None Include="Mirrored_View.fs" />
+    <None Include="Mirrored_View.vs" />
+    <None Include="Parket.fs" />
+    <None Include="Parket.vs" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>

@@ -43,5 +43,43 @@
     <Text Include="V_shader.txt">
       <Filter>Исходные файлы</Filter>
     </Text>
+    <Text Include="V_LightShader.txt">
+      <Filter>Исходные файлы</Filter>
+    </Text>
+    <Text Include="F_LightShader.txt">
+      <Filter>Исходные файлы</Filter>
+    </Text>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Parket.vs">
+      <Filter>Исходные файлы</Filter>
+    </None>
+    <None Include="Parket.fs">
+      <Filter>Исходные файлы</Filter>
+    </None>
+    <None Include="Depth.vs">
+      <Filter>Исходные файлы</Filter>
+    </None>
+    <None Include="Depth.fs">
+      <Filter>Исходные файлы</Filter>
+    </None>
+    <None Include="Depth_Map.vs">
+      <Filter>Исходные файлы</Filter>
+    </None>
+    <None Include="Depth_Map.fs">
+      <Filter>Исходные файлы</Filter>
+    </None>
+    <None Include="Mirror.vs">
+      <Filter>Исходные файлы</Filter>
+    </None>
+    <None Include="Mirror.fs">
+      <Filter>Исходные файлы</Filter>
+    </None>
+    <None Include="Mirrored_View.vs">
+      <Filter>Исходные файлы</Filter>
+    </None>
+    <None Include="Mirrored_View.fs">
+      <Filter>Исходные файлы</Filter>
+    </None>
   </ItemGroup>
 </Project>

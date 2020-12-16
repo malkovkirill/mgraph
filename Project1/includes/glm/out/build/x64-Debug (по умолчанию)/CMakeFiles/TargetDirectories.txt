@@ -1,0 +1,3 @@
+C:/Users/Малков Кирилл/source/repos/Project1/Project1/includes/glm/out/build/x64-Debug (по умолчанию)/CMakeFiles/glm_dummy.dir
+C:/Users/Малков Кирилл/source/repos/Project1/Project1/includes/glm/out/build/x64-Debug (по умолчанию)/CMakeFiles/edit_cache.dir
+C:/Users/Малков Кирилл/source/repos/Project1/Project1/includes/glm/out/build/x64-Debug (по умолчанию)/CMakeFiles/rebuild_cache.dir
