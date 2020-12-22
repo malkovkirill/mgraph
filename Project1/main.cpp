@@ -65,18 +65,19 @@ int main()
     // отсюда начинаем
 
     glEnable(GL_DEPTH_TEST);
-    Shader SceneShader("C:/Users/Малков Кирилл/source/repos/Project1/Project1/Parket.vs", "C:/Users/Малков Кирилл/source/repos/Project1/Project1/Parket.fs");
-    Shader Depth("C:/Users/Малков Кирилл/source/repos/Project1/Project1/Depth.vs", "C:/Users/Малков Кирилл/source/repos/Project1/Project1/Depth.fs");
-    Shader LightShader("C:/Users/Малков Кирилл/source/repos/Project1/Project1/V_LightShader.txt", "C:/Users/Малков Кирилл/source/repos/Project1/Project1/F_LightShader.txt");
-    Shader DepthMap("C:/Users/Малков Кирилл/source/repos/Project1/Project1/Depth_Map.vs", "C:/Users/Малков Кирилл/source/repos/Project1/Project1/Depth_Map.fs");
-    Shader Mirror("C:/Users/Малков Кирилл/source/repos/Project1/Project1/Mirror.vs", "C:/Users/Малков Кирилл/source/repos/Project1/Project1/Mirror.fs");
+    Shader SceneShader("../Project1/Parket.vs", "../Project1/Parket.fs");
+    Shader Depth("../Project1/Depth.vs", "../Project1/Depth.fs");
+    Shader LightShader("../Project1/V_LightShader.txt", "../Project1/F_LightShader.txt");
+    Shader DepthMap("../Project1/Depth_Map.vs", "../Project1/Depth_Map.fs");
+    Shader Mirror("../Project1/Mirror.vs", "../Project1/Mirror.fs");
     
-    unsigned int CubeTexture = texLoad("C:/Users/Малков Кирилл/source/repos/Project1/Project1/Textures/wooden_container.jpg");
-    unsigned int StoneTexture = texLoad("C:/Users/Малков Кирилл/source/repos/Project1/Project1/Textures/bricks.jpg");
-    unsigned int StoneNormal = texLoad("C:/Users/Малков Кирилл/source/repos/Project1/Project1/Textures/bricks_normal.jpg");
-    unsigned int StoneParallax = texLoad("C:/Users/Малков Кирилл/source/repos/Project1/Project1/Textures/Stone_Parallax.jpg");
-    unsigned int DesertTexture = texLoad("C:/Users/Малков Кирилл/source/repos/Project1/Project1/Textures/stone.jpg");
-    unsigned int DesertNormal = texLoad("C:/Users/Малков Кирилл/source/repos/Project1/Project1/Textures/Stone_Normal_Map.png");
+    unsigned int CubeTexture = texLoad("../Project1/Textures/wooden_container.jpg");
+    unsigned int StoneTexture = texLoad("../Project1/Textures/bricks.jpg");
+    unsigned int StoneNormal = texLoad("../Project1/Textures/bricks_normal.jpg");
+    unsigned int StoneParallax = texLoad("../Project1/Textures/Stone_Parallax.jpg");
+    unsigned int DesertTexture = texLoad("../Project1/Textures/Wood_Herringbone.jpg");
+    unsigned int DesertNormal = texLoad("../Project1/Textures/Wood_Herringbone_normal.jpg");
+    unsigned int DesertParallax = texLoad("../Project1/Textures/Wood_Herringbone_parallax.jpg");
 
     unsigned int MirrorFBO[7] = { 0 }, MirrorTex[7] = { 0 }, MirrorRBO[7] = { 0 };
     for (int i = 0; i < 7; i++)
@@ -211,7 +212,7 @@ int main()
     {
         float a = 2 * sin(glfwGetTime());
         float b = 2 * cos(glfwGetTime());
-        LightPos = glm::vec3(b + 0.0 + a,4.0f, a+b+3.0f);
+        LightPos = glm::vec3(0.0+a*2,4.0f,0.0f+b);
         float currentTime = (float)glfwGetTime();
         deltaTime = currentTime - lastTime;
         lastTime = currentTime;
@@ -235,7 +236,7 @@ int main()
         glBindFramebuffer(GL_FRAMEBUFFER, depthMapFBO);
         glClear(GL_DEPTH_BUFFER_BIT);
 
-        create_scene(Depth, DesertTexture, DesertNormal, StoneParallax, StoneTexture, StoneNormal, StoneParallax, 0);
+        create_scene(Depth, DesertTexture, DesertNormal, DesertParallax, StoneTexture, StoneNormal, StoneParallax, 0);
 
         glBindFramebuffer(GL_FRAMEBUFFER, 0);
         glViewport(0, 0, SCR_WIDTH, SCR_HEIGHT);
@@ -269,7 +270,7 @@ int main()
             if (i == 6)
             {
                 Mirdir[i] = Cameradir -  glm::vec3(0, 2 * Cameradir.y, 0);
-                Mirpos[i] = Camerapos - (glm::vec3(0, 2 * Camerapos.y, 0) - glm::vec3(0, 1.0 * 2, 0));
+                Mirpos[i] = Camerapos - (glm::vec3(0, 2 * Camerapos.y, 0) - glm::vec3(0, 1 * 2, 0));
             }
             if (i == 2)
             {
@@ -284,7 +285,7 @@ int main()
             if (i == 5)
             {
                 Mirdir[i] = Cameradir - glm::vec3(0, 2 * Cameradir.y, 0);
-                Mirpos[i] = Camerapos - (glm::vec3(0, 2 * Camerapos.y, 0) - glm::vec3(0, -1.0 * 2, 0));
+                Mirpos[i] = Camerapos - glm::vec3(0, 2 * Camerapos.y, 0);
             }
             if (i == 1)
             {
@@ -296,10 +297,11 @@ int main()
                 Mirdir[i] = Cameradir - glm::vec3(0, 0, 2 * Cameradir.z);
                 Mirpos[i] = Camerapos - glm::vec3(0, 0, 2 * Camerapos.z) + glm::vec3(0, 0, 1.0 * 2);
             }
-
+            LightShader.use();
             view = glm::lookAt(Mirpos[i], Mirpos[i] + Mirdir[i], Cameraup);
             projection = glm::perspective(glm::radians(45.0f), 800.0f / 600.0f, 0.1f, 100.0f);
             LightShader.setMat4("projection", projection);
+            model = glm::mat4(1.0);
             model = glm::translate(model, LightPos);
             LightShader.setMat4("view", view);
             LightShader.setMat4("model", model);
@@ -313,7 +315,7 @@ int main()
             SceneShader.setMat4("projection", projection);
             SceneShader.setMat4("LightSpaceMatr", lightSpaceMatrix);
             SceneShader.setMat4("view", view);
-            create_mirror_scene(SceneShader, LightShader, DesertTexture, DesertNormal, StoneParallax, StoneTexture, StoneNormal, StoneParallax, i);
+            create_mirror_scene(SceneShader, LightShader, DesertTexture, DesertNormal, DesertParallax, StoneTexture, StoneNormal, StoneParallax, i);
 
 
             glBindFramebuffer(GL_FRAMEBUFFER, 0);
@@ -348,7 +350,7 @@ int main()
         SceneShader.setMat4("projection", projection);
         SceneShader.setMat4("LightSpaceMatr", lightSpaceMatrix);
         SceneShader.setMat4("view", view);
-        create_scene(SceneShader, DesertTexture, DesertNormal, StoneParallax, StoneTexture, StoneNormal, StoneParallax, 1);
+        create_scene(SceneShader, DesertTexture, DesertNormal, DesertParallax, StoneTexture, StoneNormal, StoneParallax, 1);
         glBindVertexArray(0);
 
 
@@ -407,12 +409,12 @@ void create_scene(Shader SceneShader, unsigned int FloorTexture, unsigned int Fl
     glBindTexture(GL_TEXTURE_2D, FloorNormal);
     glActiveTexture(GL_TEXTURE3);
     glBindTexture(GL_TEXTURE_2D, FloorParallax);
-    SceneShader.setFloat("height_scale", 0.1);
+    SceneShader.setFloat("height_scale", 0.7);
     SceneShader.setMat4("model",model);
     create_floor();
 
     model = glm::mat4(1.0f);
-    model = glm::translate(model, glm::vec3(3.0f, 0.0f, 2.0f));
+    model = glm::translate(model, glm::vec3(0.0f, 0.0f, 3.6f));
     model = glm::scale(model, glm::vec3(0.5f));
     glActiveTexture(GL_TEXTURE1);
     glBindTexture(GL_TEXTURE_2D, CubeTexture);
@@ -420,7 +422,7 @@ void create_scene(Shader SceneShader, unsigned int FloorTexture, unsigned int Fl
     glBindTexture(GL_TEXTURE_2D, CubeNormal);
     glActiveTexture(GL_TEXTURE3);
     glBindTexture(GL_TEXTURE_2D, CubeParallax);
-    SceneShader.setFloat("height_scale", 0.1);
+    SceneShader.setFloat("height_scale", 0.7);
     SceneShader.setMat4("model", model);
     create_cube(SceneShader, model);
     if (i == 0)
@@ -437,10 +439,10 @@ void create_scene(Shader SceneShader, unsigned int FloorTexture, unsigned int Fl
     glActiveTexture(GL_TEXTURE3);
     glBindTexture(GL_TEXTURE_2D, CubeParallax);
     model = glm::mat4(1.0f);
-    model = glm::translate(model, glm::vec3(-1.0f, 0.0f, 3.0f));
+    model = glm::translate(model, glm::vec3(0.5f, -0.5f, 2.0f));
     model = glm::rotate(model, glm::radians(60.0f), glm::normalize(glm::vec3(7.0, 0.0, -2.0)));
     model = glm::scale(model, glm::vec3(0.25));
-    SceneShader.setFloat("height_scale", 0.1);
+    SceneShader.setFloat("height_scale", 0.7);
     SceneShader.setMat4("model", model);
     create_cube(SceneShader, model);
 
@@ -468,7 +470,7 @@ void create_mirror_scene(Shader SceneShader, Shader LightShader, unsigned int Fl
     if (i == 2)
     {
         model = glm::mat4(1.0f);
-        model = glm::translate(model, glm::vec3(0.0f, 0.0f, 7.0f));
+        model = glm::translate(model, glm::vec3(0.0f, 0.0f, 3.6f));
         model = glm::scale(model, glm::vec3(0.5f));
         glActiveTexture(GL_TEXTURE1);
         glBindTexture(GL_TEXTURE_2D, CubeTexture);
@@ -486,7 +488,7 @@ void create_mirror_scene(Shader SceneShader, Shader LightShader, unsigned int Fl
         glActiveTexture(GL_TEXTURE3);
         glBindTexture(GL_TEXTURE_2D, CubeParallax);
         model = glm::mat4(1.0f);
-        model = glm::translate(model, glm::vec3(-1.0f, 0.0f, 3.0f));
+        model = glm::translate(model, glm::vec3(0.5f, -0.5f, 2.0f));
         model = glm::rotate(model, glm::radians(60.0f), glm::normalize(glm::vec3(7.0, 0.0, -2.0)));
         model = glm::scale(model, glm::vec3(0.25));
         SceneShader.setMat4("model", model);
@@ -580,10 +582,10 @@ void create_cube(Shader Shadr, glm::mat4 model)
         glm::vec3 norm = glm::vec3(0.0f, 0.0f, -1.0f);
 
         glm::vec2 tpos[4];
-        tpos[0] = glm::vec2(0.0f, 0.0f);
-        tpos[2] = glm::vec2(1.0f, 1.0f);
-        tpos[1] = glm::vec2(1.0f, 0.0f);
-        tpos[3] = glm::vec2(0.0f, 1.0f);
+        tpos[1] = glm::vec2(0.0f, 0.0f);
+        tpos[3] = glm::vec2(1.0f, 1.0f);
+        tpos[0] = glm::vec2(1.0f, 0.0f);
+        tpos[2] = glm::vec2(0.0f, 1.0f);
 
         glm::vec3 tangent[2], bitangent[2];
 
@@ -647,7 +649,7 @@ void create_cube(Shader Shadr, glm::mat4 model)
         glBindVertexArray(0);
     }
     glBindVertexArray(cubeVAO);
-    //glDrawArrays(GL_TRIANGLES, 0, 6);
+    glDrawArrays(GL_TRIANGLES, 0, 6);
     glm::mat4 model1 = model;
     model1 = glm::rotate(model1, glm::radians(90.0f), glm::vec3(1.0, 0.0, 0.0));
     Shadr.setMat4("model", model1);
@@ -657,22 +659,22 @@ void create_cube(Shader Shadr, glm::mat4 model)
     model1 = glm::rotate(model1, glm::radians(180.0f), glm::vec3(0.0, 1.0, 0.0));
     model1 = glm::translate(model1, glm::vec3(0.0f, 0.0f, 0.0f));
     Shadr.setMat4("model", model1);
-    //glDrawArrays(GL_TRIANGLES, 0, 6);
+    glDrawArrays(GL_TRIANGLES, 0, 6);
 
     model1 = model;
     model1 = glm::rotate(model1, glm::radians(-90.0f), glm::vec3(1.0, 0.0, 0.0));
     Shadr.setMat4("model", model1);
-    //glDrawArrays(GL_TRIANGLES, 0, 6);
+    glDrawArrays(GL_TRIANGLES, 0, 6);
 
     model1 = model;
     model1 = glm::rotate(model1, glm::radians(90.0f), glm::vec3(0.0, 1.0, 0.0));
     Shadr.setMat4("model", model1);
-    //glDrawArrays(GL_TRIANGLES, 0, 6);
+    glDrawArrays(GL_TRIANGLES, 0, 6);
 
     model1 = model;
     model1 = glm::rotate(model1, glm::radians(-90.0f), glm::vec3(0.0, 1.0, 0.0));
     Shadr.setMat4("model", model1);
-    //glDrawArrays(GL_TRIANGLES, 0, 6);
+    glDrawArrays(GL_TRIANGLES, 0, 6);
     glBindVertexArray(0);
 
 }
